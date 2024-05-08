@@ -1,27 +1,29 @@
-import { cadastroFaker, sobrenomeVazio, emailInvalido, dadosVazios, senhaInvalida } from '../utils.js'
-import rp from '../page/register.page.js'
+import { faker } from '@faker-js/faker'
+import registerPage from '../page/register.page.js'
 
-
-describe('Cadastro no Recruiter', () => {
-    beforeEach(async () => { await rp.open() })
+describe('Cadastro com sucesso no Recruiter', () => {
+    beforeEach(async () => { await registerPage.open() })
     it('Registro com sucesso', async () => {
-        await rp.register(cadastroFaker)
-        await rp.validPage()
+        await registerPage.sucesso(faker.name.firstName(), faker.name.lastName(), faker.internet.email(), faker.phone.number('###########'), faker.internet.password())
+        await registerPage.validaPage()
     })
     it('Registro com sobrenome vazio', async () => {
-        await rp.register(sobrenomeVazio)
-        await rp.validCampoObrigatorio()
+        await registerPage.sobreNomeVazio(faker.name.firstName(), null, faker.internet.email(), faker.phone.number('###########'))
+        await registerPage.validaCampoObrigatorio()
+
     })
-    // it('Registro com email invalido', async () => {
-    //     await rp.register(emailInvalido)
-    //     await rp.validemailEmUso()
-    // })
-    // it('Registro dados vazios', async () => {
-    //     await rp.register(dadosVazios)
-    //     await rp.validCampoObrigatorio()
-    // })
-    // it('Registro com senha menor que 6 caracteres', async () => {
-    //     await rp.register(senhaInvalida)
-    //     await lp.validaTamanhodaSenha()
-    // })
+    it.only('Registro com email ja cadastrado', async () => {
+        await registerPage.EmailEmUso(faker.name.firstName(), faker.name.lastName(), faker.internet.email(), faker.phone.number('###########'))
+        browser.pause(20000)
+        await registerPage.validaEmailEmUso()
+    })
+    it('Registro com email invalido', async () => {
+        await registerPage.emailInvalido(faker.name.firstName(), faker.name.lastName(), faker.internet.email(), faker.phone.number('###########'))
+        await registerPage.validaEmailInvalido()
+    })
+
+    it('Registro com senha menor que 6 caracteres', async () => {
+        await registerPage.senhaInvalida(faker.name.firstName(), faker.name.lastName(), faker.internet.email(), faker.phone.number('###########'))
+        await registerPage.validaSenhaInvalida()
+    })
 })
