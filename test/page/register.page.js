@@ -44,7 +44,7 @@ class RegisterPage extends Page {
         browser.pause(30000)
         await this.termCheckbox.click()
         await this.buttonContinuar2.click()
-        browser.pause(30000)
+
     }
     async sobreNomeVazio(nome, sobrenome, email, telefone) {
         if (nome !== null) {
