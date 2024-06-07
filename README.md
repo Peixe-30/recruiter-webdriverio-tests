@@ -20,7 +20,7 @@ Se desejar responder cada pergunta, escohendo a opção desejada, execute o coma
 
 > npm init wdio@latest .
 
-# run configuration wizard
+# Executar o assistente de configuração
 
 > npx wdio config
 
