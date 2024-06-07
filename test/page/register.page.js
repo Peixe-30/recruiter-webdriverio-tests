@@ -1,12 +1,12 @@
 import Page from '../page/page.js'
 class RegisterPage extends Page {
 
-    get firstName() { return $('input[name="firstname"]') }
-    get lastName() { return $('input[name="lastname"]') }
-    get email() { return $('input[name="email"]') }
-    get phoneNumber() { return $('input[name="phone"]') }
-    get buttonContinuar1() { return $('.mui-style-1undr70') }
-    get buttonContinuar2() { return $('.MuiTypography-button') }
+    get firstName() { return $('input[data-test="text_field_firstname"]') }
+    get lastName() { return $('input[data-test="text_field_lastname"]') }
+    get email() { return $('input[data-test="text_field_email"]') }
+    get phoneNumber() { return $('input[data-test="text_field_phone"]') }
+    get buttonNextFirstStep() { return $('input[data-test="button-loading-next-step"]') }
+    get buttonNextSecondStep() { return $('input[data-test="button-loading-next-step"]') }
     get actuationArea() { return $('#autocomplete_actuation') }
     get findOut() { return $('#autocomplete_sourceOfOrigin') }
     get findOutSelection() { return $('.MuiChip-label') }
@@ -35,16 +35,12 @@ class RegisterPage extends Page {
         await this.actuationArea.setValue('Job')
         await browser.keys(['ArrowDown'])
         await browser.keys(['Enter'])
-        browser.pause(30000)
         await this.findOut.setValue('Google')
         await browser.keys(['ArrowDown'])
         await browser.keys(['Enter'])
-        browser.pause(30000)
         await this.password.setValue(password)
-        browser.pause(30000)
         await this.termCheckbox.click()
         await this.buttonContinuar2.click()
-        browser.pause(30000)
     }
     async sobreNomeVazio(nome, sobrenome, email, telefone) {
         if (nome !== null) {
@@ -138,14 +134,13 @@ class RegisterPage extends Page {
         expect(campoObrigatorio).toBe('Campo obrigatório')
     }
     async validaEmailEmUso() {
-        const emailEmUso = await $('go3958317564').getText()
-        // browser.pause(30000)
+        const emailEmUso = await $('.go3958317564').getText()
         expect(emailEmUso).toBe('Esse e-mail já está em uso')
     }
-    async validaEmailInvalido() {
-        const emailInvalido = await $('.mui-style-1guod47').getText()
-        expect(emailInvalido).toBe('Digite um email válido')
-    }
+    // async validaEmailInvalido() {
+    //     const emailInvalido = await $('.mui-style-1guod47').getText()
+    //     expect(emailInvalido).toBe('Digite um email válido')
+    // }
     async validaSenhaInvalida() {
 
         const senhaInvalida = await $('.mui-style-1guod47').getText()

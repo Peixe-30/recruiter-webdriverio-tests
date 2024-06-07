@@ -1,5 +1,4 @@
 export const config = {
-    //
     // ====================
     // Runner Configuration
     // ====================
@@ -49,9 +48,46 @@ export const config = {
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://saucelabs.com/platform/platform-configurator
     //
-    capabilities: [{
-        browserName: 'chrome'
-    }],
+    capabilities: [
+        {
+            browserName: 'Firefox',
+            'bstack:options': {
+                browserVersion: 'latest',
+                os: 'Windows',
+                osVersion: '10'
+            }
+        },
+        {
+            browserName: 'Chrome',
+            'bstack:options': {
+                browserVersion: 'latest',
+                os: 'Windows',
+                osVersion: '10'
+            }
+        },
+        {
+            browserName: 'Edge',
+            'bstack:options': {
+                browserVersion: 'latest',
+                os: 'Windows',
+                osVersion: '10'
+            }
+        }
+    ],
+    commonCapabilities: {
+        'bstack:options': {
+            buildName: "bstack-demo",
+            buildIdentifier: "${DATE_TIME}",
+            projectName: "RecruiterWDIO",
+            testObservability: "true",
+            networkLogs: "true",
+            consoleLogs: "info",
+            networkLogs: true,
+            percy: true,
+        }
+        //     percyCaptureMode: screenshot
+        // }
+    },
 
     //
     // ===================
@@ -85,7 +121,6 @@ export const config = {
     // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
     // gets prepended directly.
     baseUrl: 'https://rh.beta.peixe30.com.br/v2/',
-    //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 10000,
     //
@@ -100,7 +135,12 @@ export const config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    // services: [],
+    services: [
+        [
+            'browserstack',
+            { browserstackLocal: true, opts: { forceLocal: false } },
+        ],
+    ],
     //
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -135,6 +175,9 @@ export const config = {
         ui: 'bdd',
         timeout: 60000
     },
+    user: 'edinetesousa_aSTZp9',
+    key: '5fEZeHEA6MGTBQ29SC1s',
+    hostname: 'hub.browserstack.com',
 
     //
     // =====
@@ -172,21 +215,21 @@ export const config = {
     // onWorkerEnd: function (cid, exitCode, specs, retries) {
     // },
     /**
-     * Gets executed just before initialising the webdriver session and test framework. It allows you
-     * to manipulate configurations depending on the capability or spec.
+     * Gets executed just before initialising the webdriver session and test framework. It allows
+     * you to manipulate configurations depending on the capability or spec.
      * @param {object} config wdio configuration object
      * @param {Array.<Object>} capabilities list of capabilities details
-     * @param {Array.<String>} specs List of spec file paths that are to be run
-     * @param {string} cid worker id (e.g. 0-0)
+     * @param {Array.<string>} specs List of spec file paths that are to be run
+     * @param {object} args runtime arguments passed to the worker
      */
-    // beforeSession: function (config, capabilities, specs, cid) {
+    // beforeSession: function (config, capabilities, specs, args) {
     // },
     /**
      * Gets executed before test execution begins. At this point you can access to all global
      * variables like `browser`. It is the perfect place to define custom commands.
      * @param {Array.<Object>} capabilities list of capabilities details
-     * @param {Array.<String>} specs        List of spec file paths that are to be run
-     * @param {object}         browser      instance of created browser/device session
+     * @param {Array.<string>} specs List of spec file paths that are to be run
+     * @param {object} browser instance of created browser/device session
      */
     // before: function (capabilities, specs) {
     // },
@@ -198,83 +241,92 @@ export const config = {
     // beforeCommand: function (commandName, args) {
     // },
     /**
-     * Hook that gets executed before the suite starts
+     * Hook that gets executed before the suite starts.
      * @param {object} suite suite details
      */
     // beforeSuite: function (suite) {
     // },
     /**
      * Function to be executed before a test (in Mocha/Jasmine) starts.
+     * @param {object} test test object
      */
     // beforeTest: function (test, context) {
     // },
     /**
-     * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
-     * beforeEach in Mocha)
+     * Hook that gets executed before a step (in Cucumber) starts.
+     * @param {object} step step object
+     * @param {object} context step context
      */
-    // beforeHook: function (test, context, hookName) {
+    // beforeStep: function (step, context) {
     // },
     /**
-     * Hook that gets executed _after_ a hook within the suite starts (e.g. runs after calling
-     * afterEach in Mocha)
+     * Runs before a WebdriverIO command gets executed.
+     * @param {string} commandName hook command name
+     * @param {Array} args arguments that command would receive
      */
-    // afterHook: function (test, context, { error, result, duration, passed, retries }, hookName) {
+    // beforeCommand: function (commandName, args) {
     // },
+
     /**
      * Function to be executed after a test (in Mocha/Jasmine only)
-     * @param {object}  test             test object
-     * @param {object}  context          scope object the test was executed with
-     * @param {Error}   result.error     error object in case the test fails, otherwise `undefined`
-     * @param {*}       result.result    return object of test function
-     * @param {number}  result.duration  duration of test
-     * @param {boolean} result.passed    true if test has passed, otherwise false
-     * @param {object}  result.retries   information about spec related retries, e.g. `{ attempts: 0, limit: 0 }`
+     * @param {object} test test object
+     * @param {object} context test context
+     * @param {Error} result result object
      */
-    // afterTest: function(test, context, { error, result, duration, passed, retries }) {
+    // afterTest: function (test, context, { error, result, duration, passed, retries }) {
     // },
 
-
     /**
-     * Hook that gets executed after the suite has ended
+     * Hook that gets executed after the suite has ended.
      * @param {object} suite suite details
      */
     // afterSuite: function (suite) {
+    // },
+
+    /**
+     * Runs after a WebdriverIO command gets executed
+     * @param {string} commandName hook command name
+     * @param {Array} args arguments that command would receive
+     */
+    // afterCommand: function (commandName, args, result, error) {
     // },
     /**
      * Runs after a WebdriverIO command gets executed
      * @param {string} commandName hook command name
      * @param {Array} args arguments that command would receive
-     * @param {number} result 0 - command success, 1 - command error
-     * @param {object} error error object if any
      */
     // afterCommand: function (commandName, args, result, error) {
     // },
     /**
-     * Gets executed after all tests are done. You still have access to all global variables from
-     * the test.
-     * @param {number} result 0 - test pass, 1 - test fail
-     * @param {Array.<Object>} capabilities list of capabilities details
-     * @param {Array.<String>} specs List of spec file paths that ran
+     * Function to be executed after a test (in Mocha/Jasmine only)
+     * @param {object} test test object
+     * @param {object} context test context
+     * @param {Error} result result object
      */
-    // after: function (result, capabilities, specs) {
+    // afterTest: function(test, context, { error, result, duration, passed, retries }) {
+    // },
+    /**
+     * Hook that gets executed after the suite has ended.
+     * @param {object} suite suite details
+     */
+    // afterSuite: function (suite) {
     // },
     /**
      * Gets executed right after terminating the webdriver session.
      * @param {object} config wdio configuration object
      * @param {Array.<Object>} capabilities list of capabilities details
-     * @param {Array.<String>} specs List of spec file paths that ran
+     * @param {Array.<string>} specs List of spec file paths that are to be run
      */
-    // afterSession: function (config, capabilities, specs) {
+    // after: function (result, capabilities, specs) {
     // },
     /**
-     * Gets executed after all workers got shut down and the process is about to exit. An error
-     * thrown in the onComplete hook will result in the test run failing.
+     * Gets executed after all workers got shut down and the process is about to exit.
+     * An error thrown in the onComplete hook will result in the test run failing.
      * @param {object} exitCode 0 - success, 1 - fail
      * @param {object} config wdio configuration object
      * @param {Array.<Object>} capabilities list of capabilities details
-     * @param {<Object>} results object containing test results
      */
-    // onComplete: function(exitCode, config, capabilities, results) {
+    // onComplete: function(exitCode, config, capabilities) {
     // },
     /**
     * Gets executed when a refresh happens.
@@ -282,17 +334,5 @@ export const config = {
     * @param {string} newSessionId session ID of the new session
     */
     // onReload: function(oldSessionId, newSessionId) {
-    // }
-    /**
-    * Hook that gets executed before a WebdriverIO assertion happens.
-    * @param {object} params information about the assertion to be executed
-    */
-    // beforeAssertion: function(params) {
-    // }
-    /**
-    * Hook that gets executed after a WebdriverIO assertion happened.
-    * @param {object} params information about the assertion that was executed, including its results
-    */
-    // afterAssertion: function(params) {
     // }
 }

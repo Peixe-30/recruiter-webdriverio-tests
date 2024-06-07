@@ -24,8 +24,8 @@ class LoginPage extends Page {
     }
 
     async esqueciMinhaSenha(email) {
-        const esqueciMinhaSenha = $('a[href="/v2/auth/esqueci-minha-senha"]')
-        await esqueciMinhaSenha.click()
+        const linkEsqueciMinhaSenha = $('a[href="/v2/auth/esqueci-minha-senha"]')
+        await linkEsqueciMinhaSenha.click()
         const emailRecuperacaoSenha = $('input[name="email"]')
         await emailRecuperacaoSenha.setValue(email)
         const submitButton = $('button[type="submit"]')
