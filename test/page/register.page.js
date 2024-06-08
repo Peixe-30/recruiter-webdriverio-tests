@@ -41,6 +41,10 @@ class RegisterPage extends Page {
         await this.password.setValue(password)
         await this.termCheckbox.click()
         await this.buttonContinuar2.click()
+<<<<<<< HEAD
+=======
+
+>>>>>>> 513b37ad16394348d3b61cbd6b1ee42d3bbd8641
     }
     async sobreNomeVazio(nome, sobrenome, email, telefone) {
         if (nome !== null) {
